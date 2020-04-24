@@ -1,30 +1,43 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('./config/keys');
 
-const app = express();
-//crating instance
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: keys.googleClientID,
-            clientSecret: keys.googleClientSecret,
-            callbackURL: '/auth/google/callback'
-        }, 
-        (accessToken) => { //to take user details
-            console.log(accessToken)
-        }
-    )
-);
+require('./models/User');
+require('./services/passport');
 
-app.get('/auth/google', 
-    passport.authenticate('google', {
-        scope:  ['profile','email']
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+
+
+/*****************/
+/* 
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://randhir:jamshedpur12#@cluster0-qikmc.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("test");
+  console.log("err $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + err)
+  client.close();
+}); */
+
+/*********************/
+
+const app = express();
+
+app.use(
+    cookieSession({
+        maxAge: 30*24*60*60*1000,
+        keys: [keys.cookieKey] //it should be array, allows multiple key
     })
 );
 
-app.get('/auth/google/callback', passport.authenticate('google'))
+app.use(passport.initialize());
+app.use(passport.session());
+
+//crating instance
+require('./routes/authRoutes')(app);
+
 
 //if env variable defined by HEROKU process || use 5000
 const PORT = process.env.PORT || 5000;
