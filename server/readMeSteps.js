@@ -11,6 +11,9 @@ installations
 
 npm install --save express
 npm install --save passport passport-google-oauth20 (UDEMY19)
+npm install --save nodemon //helps to start the server on every change detection
+npm install --save mongoose
+npm install --save cookie-server //U46
 
 HEROKU -- deploy project
     1. signup heroku.com rkrandhir.in/jpur
@@ -46,4 +49,42 @@ Google OAuth
     + Passport -- General helper for handling auth in Express apps
     + Passport Strategy -- Helpers for authenticating with one very specific method (Email/password, Google, Facebook etc)
 
+
+=============================================
+server folder structure
+=============================================
+
++ server
+    + congig - Protected API Keys or settings
+    + routes - All route handlers, grouped by purpose
+    + services - Helper modules and business logic
+    - Index.js
+
+=============================================
+AUTHENTICATION FLOW (U47)
+=============================================
+
++ Request comes in 
+    |
+    |
+-----------  
+| Request |             //request sent to route handler 
+ ----------
+    |
+ -----------------  
+| Cookie Session |      //Extracts cookies data
+ -----------------
+    |   
+ -----------  
+| Passport |            //Pulls user id out of cookie data  
+ -----------
+    |
+ --------------------  
+| Deserialize User  |  //Functions we write to turn user id into an user
+ --------------------
+    |
+ --------------------------------------------------------  
+| User model instance added to req object as 'req.user' |  
+ --------------------------------------------------------
+    
 */
