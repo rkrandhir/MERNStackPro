@@ -14,6 +14,13 @@ npm install --save passport passport-google-oauth20 (UDEMY19)
 npm install --save nodemon //helps to start the server on every change detection
 npm install --save mongoose
 npm install --save cookie-server //U46
+npm install --save concurrently //U60
+
+client directory installation  - inside client folder
+npm install http-proxy-middleware //u61
+npm install --save redux react-redux react-router-dom
+npm install --save materialize-css@next
+npm install --save axios redux-thunk
 
 HEROKU -- deploy project
     1. signup heroku.com rkrandhir.in/jpur

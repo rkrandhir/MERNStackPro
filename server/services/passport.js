@@ -25,6 +25,29 @@ passport.use(
             clientSecret: keys.googleClientSecret,
             callbackURL: '/auth/google/callback'
         }, 
+       async (accessToken, refreshToken, profile, done) => { //to take user details
+            // it checks if User already exists
+            const existingUser =  await User.findOne({ googleId: profile.id });
+            if(existingUser) { //if already exists
+               return done(null, existingUser);
+            } 
+             //if new user
+            const user = await new User({ googleId: profile.id }).save();
+            done(null, user);
+        } 
+        
+    )
+);
+
+// OLD CODE FOR WHICH WE REFACTORED
+
+/* passport.use(
+    new GoogleStrategy(
+        {
+            clientID: keys.googleClientID,
+            clientSecret: keys.googleClientSecret,
+            callbackURL: '/auth/google/callback'
+        }, 
         (accessToken, refreshToken, profile, done) => { //to take user details
             // it checks if User already exists
             User.findOne({ googleId: profile.id })
@@ -42,4 +65,4 @@ passport.use(
                 })
         }
     )
-);
+); */
